@@ -28,8 +28,8 @@ import io.realm.exceptions.RealmPrimaryKeyConstraintException;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
 
-    private transient List<Todo> todoList;
-    private transient MainActivity activity;
+    private List<Todo> todoList;
+    private MainActivity activity;
 
     public TodoAdapter(MainActivity activity){
         this.activity = activity;
