@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private TodoAdapter tasksAdapter;
 
     private List<Todo> taskList;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
 
@@ -91,8 +94,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public int compare(Todo todo, Todo t1) {
 //                return todo.getDate().compareTo(t1.getDate());
-                String[] date1 = todo.getDate().split("-");
-                String[] date2 = t1.getDate().split("-");
+                String[] date1 = todo.getTotalDate().split("-");
+                String[] date2 = t1.getTotalDate().split("-");
+                int min1 = Integer.parseInt(date1[4]);
+                int min2 = Integer.parseInt(date2[4]);
+                int hour1 = Integer.parseInt(date1[3]);
+                int hour2 = Integer.parseInt(date2[3]);
                 int year1 = Integer.parseInt(date1[2]);
                 int year2 = Integer.parseInt(date2[2]);
                 int month1 = Integer.parseInt(date1[1]);
@@ -104,9 +111,14 @@ public class MainActivity extends AppCompatActivity {
                     return year1 - year2;
                 } else if (month1 != month2) {
                     return month1 - month2;
-                } else {
+                } else if (day1 != day2){
                     return day1 - day2;
+                } else if (hour1 != hour2){
+                    return hour1 - hour2;
+                } else {
+                    return min1 - min2;
                 }
+
             }
         });
 //        taskList = new ArrayList<>();
@@ -128,6 +140,15 @@ public class MainActivity extends AppCompatActivity {
         tasksAdapter.setTasks(taskList);
         realm.close();
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tasksAdapter.refreshData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
     }
 
@@ -145,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     todo1.setTitle("Coding");
                     todo1.setDescription("UAS Mobile");
                     todo1.setDate("19-04-23");
+                    todo1.setPrio("High");
 
                 }catch(RealmPrimaryKeyConstraintException e) {
                     Log.d("TAG", "PrimaryKey Sudah Ada"+e.getMessage().toString());

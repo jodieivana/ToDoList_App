@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.renderscript.Sampler;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         String title = adapter.getItem(position).getTitle();
         String desc = adapter.getItem(position).getDescription();
         String date = adapter.getItem(position).getDate();
+        String time = adapter.getItem(position).getTime();
+        String prio = adapter.getItem(position).getPrio();
 
         if(direction == ItemTouchHelper.LEFT){
             AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
@@ -76,7 +79,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             dialog.show();
         }
         else {
-            adapter.editItem(id, title, desc, date);
+            adapter.editItem(id, title, desc, date, time, prio);
             Intent intent = new Intent(adapter.getContext(), EditActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("id", id);
@@ -85,6 +88,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
             intent.putExtra("title", adapter.getItem(position).getTitle());
             intent.putExtra("desc", adapter.getItem(position).getDescription());
             intent.putExtra("date", adapter.getItem(position).getDate());
+            intent.putExtra("time", adapter.getItem(position).getTime());
+            intent.putExtra("prio", adapter.getItem(position).getPrio());
 
             adapter.getContext().startActivity(intent);
         }
