@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         RealmResults<Todo> todos = realm.where(Todo.class).findAll();
 
         List<Todo> taskList = realm.copyFromRealm(todos);
-        Collections.sort(taskList, new Comparator<Todo>() {
+        taskList.sort(new Comparator<Todo>() {
             @Override
             public int compare(Todo todo, Todo t1) {
 //                return todo.getDate().compareTo(t1.getDate());
@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
                     return year1 - year2;
                 } else if (month1 != month2) {
                     return month1 - month2;
-                } else if (day1 != day2){
+                } else if (day1 != day2) {
                     return day1 - day2;
-                } else if (hour1 != hour2){
+                } else if (hour1 != hour2) {
                     return hour1 - hour2;
                 } else {
                     return min1 - min2;
